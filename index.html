@@ -13,24 +13,40 @@
     <div id="gif-container">
         <div id="gifs-go-here"></div>
     </div>
+    <div id="form-container">
+        <form id="form">
+            <label for="car-input">Add a Car</label>
+            <input type="text" id="car-input"><br>
+      
+            <input id="add-car" type="submit" value="Submit">
+          </form>
+    </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <script type="text/javascript">
         // create array of topics
         // make buttons from the topic array
         // when button is pressed display 10 static gif images from GIPHY API
         // when clicked GIPHY image should animate, if clicked again it stops
-        // display rating under every gif
-        var topics = ["lancia stratos", "audi quattro", "porsche 959", "volvo 200 series", "mitsubishi lancer evolution", "alpine a110", "mini cooper", "subaru impreza"];
+        // display rating on top of every gif
+        var topics = ["lancia stratos 1974", "audi sport quattro s1", "porsche 959", "volvo 200 series", "mitsubishi lancer evolution", "alpine a110", "mini cooper", "subaru impreza", "Peugeot 205 T16"];
 
         function displayButtonGIfs() {
+
             var car = $(this).attr("data-name");
             var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=8uvhxQ6jYtOcMn8GKSGAbLiull3RrMZ6&q=" + car + "&limit=10&offset=0&rating=G&lang=en"
+
             $('#gifs-go-here').empty();
+
             $.ajax({
                 url: queryURL,
                 method: "GET"
             }).then(function (response) {
+
                 var results = response.data;
+                console.log(response.data);
+
                 for (var i = 0; i < results.length; i++) {
                     var gifStill = results[i].images.fixed_height_still.url;
                     var gifAnimate = results[i].images.fixed_height.url;
@@ -52,10 +68,12 @@
                 }
                 $('.gif').on("click", function (){
                     var state = $(this).attr("data-state");
-                    if (state === "still"){
-                        state = $(this).attr("src", $(this).attr("data-animate"));
-                    }else if (state === "animate"){
+                    if (state === "animate"){
                         state = $(this).attr("src", $(this).attr("data-still"));
+                        $(this).attr("data-state", "still");
+                    }else if (state === "still"){
+                        state = $(this).attr("src", $(this).attr("data-animate"));
+                        $(this).attr("data-state", "animate");
                     }
                 })
             });
@@ -71,6 +89,14 @@
                 $('#buttons').append(newButton);
             }
         }
+
+        $('#add-car').on("click", function(event){
+            event.preventDefault();
+            var addCar = $('#car-input').val().trim();
+            topics.push(addCar);
+        
+            renderButtons();
+        })
 
         $(document).on("click", ".rally-cars", displayButtonGIfs);
 

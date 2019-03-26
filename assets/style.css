@@ -1,9 +1,7 @@
-/* #button-container {
-  
-} */
+
 #gif-container {
-    
     width: 960px;
+    float: left;
 }
 button {
     margin: 5px;
@@ -11,4 +9,7 @@ button {
 .imgDiv {
     margin: 5px;
     float: left;
+}
+#form-container {
+    float: right;
 }
